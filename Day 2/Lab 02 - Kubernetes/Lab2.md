@@ -7,6 +7,6 @@
 - kubectl get deployment
 4. Type this command to check that a pod was built and is running succesfully
 - kubectl get pods
-5. Type this command to expose port 80 and allow external access into the Kubernetes cluster
-- kubectl expose deployment helloworld --type=LoadBalancer --port=80
-6. Open a web browser and go to the following URL: http://localhost
+5. Type this command to expose port 6001 and allow external access into the Kubernetes cluster
+- kubectl expose deployment helloworld --type=LoadBalancer --port=6001
+6. Open a web browser and go to the following URL: http://localhost:6001

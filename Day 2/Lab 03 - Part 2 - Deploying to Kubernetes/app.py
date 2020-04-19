@@ -31,6 +31,6 @@ def upload():
 def photo(photo):
     return render_template('photo.html',photo=photo)
 
-##### Run the Flask instance, browse to http://<< Host IP or URL >>:5003 #####
+##### Run the Flask instance, browse to http://<< Host IP or URL >>:6003 #####
 if __name__ == "__main__":
-	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '5003')), threaded=True)
+	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '6003')), threaded=True)

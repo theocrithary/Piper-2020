@@ -11,5 +11,5 @@
 5. Type this command to check that the container image was built successfully
 - docker image ls
 6. Type this command to start the container and run the Python application
-- docker run -p 5001:5001 helloworld
-7. Open a web browser and go to the following URL: http://localhost:5001
+- docker run -p 6000:6000 helloworld
+7. Open a web browser and go to the following URL: http://localhost:6000
