@@ -14,19 +14,24 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from config import ecs_test_drive
 
+### Applicaiton configuration settings ###
 # Set the database target to your local MongoDB instance
 client = MongoClient('127.0.0.1:27017')
-DB_NAME = "mongodb"  ##### Make sure this matches the name of your MongoDB database ######
+DB_NAME = "mongodb"  # This will be the name of your database
+COL_NAME = "photos"  # This will be the name of your collection
 
-# Get database connection with database name
-db = client[DB_NAME]
+
+##### Main body code #####
+
+db = client[DB_NAME] # Create the database using the name provided and client connection to the MongoDB server
+db_collection = db[COL_NAME]   # Create the collection using the name provided and database connection
 
 # Remove any existing documents in photos collection
 # db.photos.delete_many({})   # Comment this line if you don't want to remove documents each time you start the app
 
 # Retrieve all photos records from database
 def get_photos():
-    return db.photos.find({})
+    return db_collection.find({})
 
 # Insert form fields into database
 def insert_photo(request):
@@ -37,7 +42,7 @@ def insert_photo(request):
     photo_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
     thumbnail_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
 
-    db.photos.insert_one({'title':title, 'comments':comments, 'photo':photo_url, 'thumb':thumbnail_url})
+    db_collection.insert_one({'title':title, 'comments':comments, 'photo':photo_url, 'thumb':thumbnail_url})
 
 def upload_photo(file):
     # Get ECS credentials from external config file

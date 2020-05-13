@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from config import ecs_test_drive
 
+### Applicaiton configuration settings ###
 # Check if running in Pivotal Web Services with MongoDB service bound
 if 'VCAP_SERVICES' in os.environ:
     VCAP_SERVICES = json.loads(os.environ['VCAP_SERVICES'])
@@ -24,11 +25,16 @@ if 'VCAP_SERVICES' in os.environ:
 
 # Otherwise, assume running locally with local MongoDB instance
 else:
-    client = MongoClient('10.108.101.102:27017')
-    DB_NAME = "mongodb"  ##### Make sure this matches the name of your MongoDB database ######
+    # Set the database target to your local MongoDB instance
+    client = MongoClient('127.0.0.1:27017')
+    DB_NAME = "mongodb"  # This will be the name of your database
+    COL_NAME = "photos"  # This will be the name of your collection
 
-# Get database connection with database name
-db = client[DB_NAME]
+
+##### Main body code #####
+
+db = client[DB_NAME] # Create the database using the name provided and client connection to the MongoDB server
+db_collection = db[COL_NAME]   # Create the collection using the name provided and database connection
 
 # Remove any existing documents in photos collection
 # db.photos.delete_many({})   # Comment this line if you don't want to remove documents each time you start the app
