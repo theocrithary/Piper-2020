@@ -39,11 +39,11 @@ db = client[DB_NAME] # Create the database using the name provided and client co
 db_collection = db[COL_NAME]   # Create the collection using the name provided and database connection
 
 # Remove any existing documents in photos collection
-# db.photos.delete_many({})   # Comment this line if you don't want to remove documents each time you start the app
+# db_collection.delete_many({})   # Comment this line if you don't want to remove documents each time you start the app
 
 # Retrieve all photos records from database
 def get_photos():
-    return db.photos.find({})
+    return db_collection.find({})
 
 # Insert form fields into database
 def insert_photo(request):
@@ -54,7 +54,7 @@ def insert_photo(request):
     photo_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + filename
     thumbnail_url = "http://" + ecs_test_drive['ecs_access_key_id'].split('@')[0] + ".public.ecstestdrive.com/" + ecs_test_drive['ecs_bucket_name'] + "/" + thumbfile
 
-    db.photos.insert_one({'title':title, 'comments':comments, 'photo':photo_url, 'thumb':thumbnail_url})
+    db_collection.insert_one({'title':title, 'comments':comments, 'photo':photo_url, 'thumb':thumbnail_url})
 
 def upload_photo(file):
     # Get ECS credentials from external config file
