@@ -28,8 +28,10 @@ else:
     # Set the database target to your local MongoDB instance
     client = MongoClient('127.0.0.1:27017')
     DB_NAME = "mongodb"  # This will be the name of your database
-    COL_NAME = "photos"  # This will be the name of your collection
 
+
+# Set the collection name
+COL_NAME = "photos"  # This will be the name of your collection
 
 ##### Main body code #####
 
