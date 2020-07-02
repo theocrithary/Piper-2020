@@ -1,0 +1,112 @@
+## Use PowerShell for the following commands
+curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.8.1/kind-windows-amd64
+mkdir C:\Users\demouser\AppData\Local\Kind
+$v = [System.Environment]::GetEnvironmentVariable('PATH','user')
+setx path "$v;C:\Users\demouser\AppData\Local\Kind"
+Move-Item .\kind-windows-amd64.exe C:\Users\demouser\AppData\Local\Kind\kind.exe
+
+## Use a traditional command prompt or re-open PowerShell
+kind create cluster --image=kindest/node:v1.16.9@sha256:7175872357bc85847ec4b1aba46ed1d12fa054c83ac7a8a11f5c268957fd5765
+docker exec -it kind-control-plane bash
+apt-get update
+apt-get install -y vim
+
+vi /var/lib/kubelet/config.yaml
+
+## Add the below lines to the bottom of the file
+VolumeSnapshotDataSource: true
+CSINodeInfo: true
+CSIDriverRegistry: true
+
+vi /etc/kubernetes/manifests/kube-apiserver.yaml
+
+## Add the below code as a new line under the etcd-servers setting in the kube-apiserver section of the file
+- --feature-gates=VolumeSnapshotDataSource=true,CSINodeInfo=true,CSIDriverRegistry=true
+
+vi /etc/kubernetes/manifests/kube-controller-manager.yaml
+
+## Add the below code as a new line under the enable-hostpath-provisioner setting in the kube-controller-manager section of the file
+- --feature-gates=VolumeSnapshotDataSource=true,CSINodeInfo=true,CSIDriverRegistry=true
+
+vi /etc/kubernetes/manifests/kube-scheduler.yaml
+
+## Add the below code as a new line under the bind-address setting in the kube-scheduler section of the file
+- --feature-gates=VolumeSnapshotDataSource=true,CSINodeInfo=true,CSIDriverRegistry=true
+
+vi /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+## Add --feature-gates=VolumeSnapshotDataSource=true,CSINodeInfo=true,CSIDriverRegistry=true to the end of the below Environment config line
+Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --feature-gates=VolumeSnapshotDataSource=true,CSINodeInfo=true,CSIDriverRegistry=true"
+
+systemctl daemon-reload
+systemctl restart kubelet
+
+vi /etc/systemd/system/multi-user.target.wants/containerd.service
+
+[Service]
+...
+MountFlags=shared
+
+systemctl daemon-reload
+systemctl restart containerd
+
+## Open the below file with Atom on your Windows desktop and copy it's contents
+C:\Users\critht\.kube\config
+
+## Go back to the command prompt with the bash session open to the Kind cluster
+vi ~/.kube/config
+kubectl config delete-context docker-desktop
+kubectl config delete-cluster docker-desktop
+kubectl config unset users.docker-desktop
+kubectl config set-cluster kind-kind --server=https://127.0.0.1:6443
+
+kubectl config view
+## Confirm all references to Docker Desktop have been removed
+
+kubectl cluster-info
+
+## Clone the github repo
+cd ~
+curl -LO https://github.com/dell/csi-isilon/archive/master.zip
+apt-get install -y unzip
+unzip master.zip
+
+cd ~/csi-isilon-master/helm
+## Generate Base64 encrypted strings for both the username and password of the Isilon system
+echo -n "isilon" | base64
+aXNpbG9u
+
+vi secret.yaml
+## Update with the username and password for Isilon as encrypted from the previous step
+
+cp csi-isilon/values.yaml myvalues.yaml
+
+vi myvalues.yaml
+## Update the isiIP and isiPort to reflect the Isilon endpoint
+
+systemctl daemon-reload
+systemctl restart kubelet
+
+kubectl create namespace isilon
+kubectl create -f secret.yaml
+
+curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/verify.kubernetes
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+#### run the installation shell script ####
+sh install.isilon
+
+## When completed, without any errors, there should be 5 isilon controller pods and 2 isilon nodes running
+root@kind-control-plane:~/csi-isilon-master/helm# kubectl get pods -n isilon
+NAMESPACE            NAME                                         READY   STATUS    RESTARTS   AGE
+isilon               isilon-controller-0                          5/5     Running   0          33m
+isilon               isilon-node-hhd7q                            2/2     Running   0          33m
+
+kubectl create namespace test
+kubectl get pods -n test
+kubectl get pvc -n test
+kubectl get persistentvolumes -n test
+helm list
