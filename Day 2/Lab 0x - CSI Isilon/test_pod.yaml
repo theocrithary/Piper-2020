@@ -2,13 +2,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: isilontestpod1
+  name: busybox
   namespace: test
 spec:
   containers:
   - name: test
-    image: docker.io/centos:latest
-    command: [ "/bin/sleep", "3600" ]
+    image: busybox
+    command: [ "/bin/bash"]
+    args: ["c", "sleep 3600" ]
     volumeMounts:
     - name: workdir
       mountPath: "/data0"
