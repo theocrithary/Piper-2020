@@ -11,3 +11,5 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: isilon
+  mountOptions:
+    - nfsvers=3
