@@ -106,7 +106,23 @@ isilon               isilon-controller-0                          5/5     Runnin
 isilon               isilon-node-hhd7q                            2/2     Running   0          33m
 
 kubectl create namespace test
-kubectl get pods -n test
-kubectl get pvc -n test
-kubectl get persistentvolumes -n test
-helm list
+kubectl config set-context --current --namespace=test
+kubectl get pods
+kubectl get pvc
+kubectl get persistentvolumes
+
+cd ~
+curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/pvc.yaml
+kubectl create -f pvc.yaml
+kubectl get persistentvolumes
+
+apt-get install nfs-common
+rm /lib/systemd/system/nfs-common.service
+systemctl daemon-reload
+systemctl start nfs-common
+systemctl status nfs-common
+systemctl enable nfs-common
+systemctl is-enabled nfs-common
+
+curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/test_pod.yaml
+kubectl create -f test_pod.yaml
