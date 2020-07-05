@@ -1,7 +1,7 @@
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: pvol0
+  name: pvc0
   namespace: test
 spec:
   accessModes:
@@ -11,5 +11,3 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: isilon
-  mountOptions:
-    - nfsvers=3
