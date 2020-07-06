@@ -108,10 +108,6 @@ isilon               isilon-node-hhd7q                            2/2     Runnin
 
 kubectl create namespace test
 kubectl config set-context --current --namespace=test
-kubectl get pods
-kubectl get pvc
-kubectl get persistentvolumes
-
 
 cd ~
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/pvc.yaml
@@ -126,8 +122,20 @@ systemctl status nfs-common
 systemctl enable nfs-common
 systemctl is-enabled nfs-common
 
+kubectl patch storageclass isilon -p '{"mountOptions": ["nfsvers=3"]}'
+
+systemctl daemon-reload
+systemctl restart kubelet
+
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/test_pod.yaml
 kubectl create -f test_pod.yaml
 
-kubectl delete pod busybox
+kubectl get pods
+kubectl get pvc
+kubectl get persistentvolumes
+kubectl describe storageclass
+kubectl describe pod isilontestpod1
+
+
+kubectl delete pod isilontestpod1
 kubectl delete pvc pvol0
