@@ -83,7 +83,6 @@ cp csi-isilon/values.yaml myvalues.yaml
 
 vi myvalues.yaml
 ## Update the isiIP and isiPort to reflect the Isilon endpoint
-## Change the nfsV3 option from "false" to "true"
 
 systemctl daemon-reload
 systemctl restart kubelet
@@ -122,10 +121,8 @@ systemctl status nfs-common
 systemctl enable nfs-common
 systemctl is-enabled nfs-common
 
-kubectl patch storageclass isilon -p '{"mountOptions": ["nfsvers=3"]}'
+############ kubectl patch storageclass isilon -p '{"mountOptions": ["nfsvers=3"]}' ######################
 
-systemctl daemon-reload
-systemctl restart kubelet
 
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/test_pod.yaml
 kubectl create -f test_pod.yaml
@@ -139,3 +136,5 @@ kubectl describe pod isilontestpod1
 
 kubectl delete pod isilontestpod1
 kubectl delete pvc pvol0
+
+kubectl exec -it isilontestpod1 bash
