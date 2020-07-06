@@ -10,7 +10,7 @@ spec:
     command: [ "/bin/sleep", "3600" ]
     volumeMounts:
     - name: workdir
-      mountPath: "/mnt"
+      mountPath: "/data0"
       name: pvol0
   volumes:
     - name: pvol0
