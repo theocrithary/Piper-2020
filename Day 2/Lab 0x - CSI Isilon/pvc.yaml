@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc0
+  name: pvol0
   namespace: test
 spec:
   accessModes:
