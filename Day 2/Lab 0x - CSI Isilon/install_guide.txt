@@ -1,3 +1,18 @@
+## Login to the Isilon web interface
+user: root
+pass: Password123!
+
+- Navigate to "File System" --> "File system explorer"
+- Create a new directory un the /ifs/data path called csi (i.e. /ifs/data/csi)
+- Assign the root user from the File:System provider
+- Navigate to "Protocols" --> "UNIX sharing (NFS)" --> "Global settings"
+- Check the "Enable NFSv4" checkbox and save changes
+- Go to the "Export settings" tab
+- Change the "Root user mapping" setting to "Use custom" and "Map root users to a specified user"
+- Click the 'browse' button next to user and select the "File:System" provider in the drop down list
+- Click 'search' and select the root user
+
+
 ## Use PowerShell for the following commands
 curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.8.1/kind-windows-amd64
 mkdir C:\Users\demouser\AppData\Local\Kind
@@ -53,15 +68,17 @@ systemctl restart containerd
 ## Open the below file with Atom on your Windows desktop and copy it's contents
 C:\Users\critht\.kube\config
 
+## Create a new file temporarily and paste the above contents
+Edit the file and remove all references to clusters, contexts and users that are not related to 'kind'
+You should now have a clean K8s config file that only contains the config relevant to 'kind'
+Copy the contents of the newly prepared file
+
 ## Go back to the command prompt with the bash session open to the Kind cluster
 vi ~/.kube/config
-kubectl config delete-context docker-desktop
-kubectl config delete-cluster docker-desktop
-kubectl config unset users.docker-desktop
 kubectl config set-cluster kind-kind --server=https://127.0.0.1:6443
 
 kubectl config view
-## Confirm all references to Docker Desktop have been removed
+## Confirm the config file is setup with all the 'kind' settings and does not include any other k8s environments
 
 kubectl cluster-info
 
@@ -82,7 +99,8 @@ vi secret.yaml
 cp csi-isilon/values.yaml myvalues.yaml
 
 vi myvalues.yaml
-## Update the isiIP and isiPort to reflect the Isilon endpoint
+## Update the isiIP to reflect the Isilon endpoint
+192.168.1.12
 
 systemctl daemon-reload
 systemctl restart kubelet
@@ -96,16 +114,8 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scr
 chmod 700 get_helm.sh
 ./get_helm.sh
 
-## not sure if this is needed ##
-apt-get install nfs-common
-rm /lib/systemd/system/nfs-common.service
-systemctl daemon-reload
-systemctl start nfs-common
-systemctl status nfs-common
-systemctl enable nfs-common
-systemctl is-enabled nfs-common
-
 #### run the installation shell script ####
+
 sh install.isilon
 
 ## When completed, without any errors, there should be 5 isilon controller pods and 2 isilon nodes running
@@ -120,9 +130,6 @@ kubectl config set-context --current --namespace=test
 cd ~
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/pvc.yaml
 kubectl create -f pvc.yaml
-kubectl get persistentvolumes
-
-############ kubectl patch storageclass isilon -p '{"mountOptions": ["nfsvers=3"]}' ######################
 
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/test_pod.yaml
 kubectl create -f test_pod.yaml
@@ -133,8 +140,9 @@ kubectl get persistentvolumes
 kubectl describe storageclass
 kubectl describe pod isilontestpod1
 
+kubectl exec -it isilontestpod1 bash
+cd /data0
+touch test
 
 kubectl delete pod isilontestpod1
 kubectl delete pvc pvol0
-
-kubectl exec -it isilontestpod1 bash
