@@ -96,6 +96,15 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scr
 chmod 700 get_helm.sh
 ./get_helm.sh
 
+## not sure if this is needed ##
+apt-get install nfs-common
+rm /lib/systemd/system/nfs-common.service
+systemctl daemon-reload
+systemctl start nfs-common
+systemctl status nfs-common
+systemctl enable nfs-common
+systemctl is-enabled nfs-common
+
 #### run the installation shell script ####
 sh install.isilon
 
@@ -113,16 +122,7 @@ curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%
 kubectl create -f pvc.yaml
 kubectl get persistentvolumes
 
-apt-get install nfs-common
-rm /lib/systemd/system/nfs-common.service
-systemctl daemon-reload
-systemctl start nfs-common
-systemctl status nfs-common
-systemctl enable nfs-common
-systemctl is-enabled nfs-common
-
 ############ kubectl patch storageclass isilon -p '{"mountOptions": ["nfsvers=3"]}' ######################
-
 
 curl -LO https://github.com/theocrithary/Piper-2020/raw/master/Day%202/Lab%200x%20-%20CSI%20Isilon/test_pod.yaml
 kubectl create -f test_pod.yaml
