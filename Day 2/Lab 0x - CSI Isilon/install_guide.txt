@@ -137,7 +137,7 @@ kubectl create -f test_pod.yaml
 kubectl get pods
 kubectl get pvc
 kubectl get persistentvolumes
-kubectl describe storageclass
+kubectl describe storageclass isilon
 kubectl describe pod isilontestpod1
 
 kubectl exec -it isilontestpod1 bash
