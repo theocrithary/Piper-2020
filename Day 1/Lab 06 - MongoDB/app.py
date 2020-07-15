@@ -7,7 +7,6 @@
 ##################################################
 
 # Import modules required for app
-import os
 from flask import Flask, render_template, request
 from models import get_photos, insert_photo
 
@@ -28,4 +27,4 @@ def upload():
 
 ##### Run the Flask instance, browse to http://<< Host IP or URL >>:5000 #####
 if __name__ == "__main__":
-	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '5000')), threaded=True)
+	app.run(debug=False, host='localhost', port='5000', threaded=True)
