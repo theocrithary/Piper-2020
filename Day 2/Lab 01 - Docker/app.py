@@ -7,7 +7,6 @@
 ##################################################
 
 # Import modules required for app
-import os
 from flask import Flask
 
 # Create a Flask instance
@@ -23,4 +22,4 @@ def index():
 
 ##### Run the Flask instance, browse to http://<< Host IP or URL >> #####
 if __name__ == "__main__":
-    app.run(debug=False, host='localhost', port='6000', threaded=True)
+    app.run(debug=False, host='0.0.0.0', port='6000', threaded=True)
