@@ -1,9 +1,9 @@
-pipeline {  
+pipeline {
   environment {
     registry = "YourDockerHubID/YourRepoName"
-    registryCredential = 'dockerhub'    
+    registryCredential = 'dockerhub'
   }  
-  agent any  
+  agent any
   stages {
     stage('Checkout'){
       steps {
@@ -14,7 +14,7 @@ pipeline {
       steps{
         script {
           imageName = registry + ":$BUILD_NUMBER"
-          context = "'./Day 2/Lab 03 - Part 1 - Containerising an App'"  
+          context = "'.'"
           dockerImage = docker.build(imageName, context)
         }
       }
@@ -25,7 +25,7 @@ pipeline {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
             dockerImage.push("latest")
-          }      
+          }
         }
       }
     }
