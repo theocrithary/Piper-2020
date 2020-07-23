@@ -48,7 +48,17 @@
             description: "{{ Isilon_Share_Descr }}",
             browsable: true,
             zone: "{{ Isilon_Zone }}",
-            create_path: true
+            create_path: true,
+              permissions: [
+               {
+                permission: "full",
+                permission_type: "allow",
+                trustee:
+                  {
+                   name: "{{ Isilon_User }}",
+                   type: "user"
+                  }
+              } ]
           }
         status_code: 201
       register: result_create
