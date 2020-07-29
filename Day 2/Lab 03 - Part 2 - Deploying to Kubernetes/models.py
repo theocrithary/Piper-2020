@@ -84,6 +84,10 @@ def upload_photo(file):
     # Empty the variables to prevent memory leaks
     img = None
 
+    ## Check if the object storage bucket already exists, if not, create it
+    if not session.Bucket(ecs_bucket_name) in session.buckets.all():
+        session.create_bucket(Bucket=ecs_bucket_name)
+
     ## Upload the original image to ECS
     session.Object(ecs_bucket_name, filename).put(Body=open("uploads/" + filename, 'rb'), ACL='public-read')
 
