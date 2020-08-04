@@ -16,12 +16,17 @@ from PIL import Image
 from config import ecs_test_drive
 
 ### Applicaiton configuration settings ###
+# Check if user defined environment variable exists
+if "DB_URI" in os.environ:
+    DB_ENDPOINT = MongoClient(os.environ['DB_URI'])
+    DB_NAME = os.environ['DB_Name']
+
 # Check if running in Pivotal Web Services with MongoDB service bound
-if 'VCAP_SERVICES' in os.environ:
+elif 'VCAP_SERVICES' in os.environ:
     VCAP_SERVICES = json.loads(os.environ['VCAP_SERVICES'])
-    MONGOCRED = VCAP_SERVICES["mlab"][0]["credentials"]
-    client = MongoClient(MONGOCRED["uri"] + "?retryWrites=false")
-    DB_NAME = str(MONGOCRED["uri"].split("/")[-1])
+    MONGOCRED = VCAP_SERVICES["mongodb"][0]
+    client = MongoClient(MONGOCRED["uri"])
+    DB_NAME = str(MONGOCRED["uri"].split("/"))
 
 # Otherwise, assume running locally with local MongoDB instance
 else:
