@@ -10,6 +10,7 @@
 import os
 import boto3
 import json
+import dns
 from pymongo import MongoClient
 from werkzeug.utils import secure_filename
 from PIL import Image
