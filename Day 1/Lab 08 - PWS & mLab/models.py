@@ -18,7 +18,7 @@ from config import ecs_test_drive
 ### Applicaiton configuration settings ###
 # Check if user defined environment variable exists
 if "DB_URI" in os.environ:
-    DB_ENDPOINT = MongoClient(os.environ['DB_URI'])
+    client = MongoClient(os.environ['DB_URI'])
     DB_NAME = os.environ['DB_Name']
 
 # Check if running in Pivotal Web Services with MongoDB service bound
