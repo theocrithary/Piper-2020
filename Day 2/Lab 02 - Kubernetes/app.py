@@ -21,6 +21,6 @@ def index():
             """.format()
     return html
 
-##### Run the Flask instance, browse to http://<< Host IP or URL >> #####
+##### Run the Flask instance, browse to http://<< Host IP or URL >>:port #####
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=6001)
+    app.run(host='0.0.0.0', port=7001)
