@@ -1,5 +1,5 @@
 # Use an official Python container as a parent image
-FROM python:3
+FROM --platform=linux/386 python:latest
 
 # Set the working directory to /usr/src/app
 WORKDIR /usr/src/app
